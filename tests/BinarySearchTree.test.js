@@ -1,6 +1,78 @@
 import Node from "/src/TreeNode";
 import BST from "/src/BinarySearchTree";
 
+describe("project-required tests", () => {
+  const randomIntegers = (size = 100, factor = 100, scale = 0) => {
+    const data = [];
+    for (let i = 0; i < size; i++) {
+      data.push(Math.floor(Math.random() * factor) + scale);
+    }
+    return data;
+  };
+
+  const printAll = () => {
+    test("print levelOrder", () => {
+      const values = [];
+      tree.levelOrderForEach((i) => values.push(i));
+      console.log("levelOrder:", values.join(", "));
+    });
+    test("print preOrder", () => {
+      const values = [];
+      tree.preOrderForEach((i) => values.push(i));
+      console.log("preOrder:", values.join(", "));
+    });
+    test("print postOrder", () => {
+      const values = [];
+      tree.postOrderForEach((i) => values.push(i));
+      console.log("postOrder:", values.join(", "));
+    });
+    test("print inOrder", () => {
+      const values = [];
+      tree.inOrderForEach((i) => values.push(i));
+      console.log("inOrder:", values.join(", "));
+    });
+  };
+
+  const tree = new BST();
+
+  describe("1. Create a binary search tree from an array of random numbers", () => {
+    test("build tree", () => {
+      tree.buildBST(randomIntegers());
+    });
+  });
+
+  describe("2. Confirm that the tree is balanced", () => {
+    test("balance", () => {
+      expect(tree.isBalanced()).toBe(true);
+    });
+  });
+
+  describe("3. Print out all elements in level, pre, post, and in order", () => {
+    printAll();
+  });
+
+  describe("4-5. Unbalance the tree", () => {
+    test("add new values", () => {
+      const newEntries = randomIntegers(50, 100, 100);
+      newEntries.forEach((i) => {
+        tree.insert(i);
+        expect(tree.isBalanced()).toBe(true);
+      });
+    });
+  });
+
+  describe("6-7. Balance the tree, then confirm that it is balanced", () => {
+    test("test rebalance", () => {
+      tree.rebalance();
+      expect(tree.isBalanced()).toBe(true);
+    });
+  });
+
+  describe("8. Print out all elements in level, pre, post, and in order", () => {
+    printAll();
+  });
+});
+
 describe("tree", () => {
   test("module exists", () => {
     expect(new BST()).toBeDefined();
