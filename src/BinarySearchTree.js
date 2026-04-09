@@ -73,6 +73,11 @@ export default class BST {
   insert(value) {
     if (!value) throw new Error("ArgError: argument must be a valid value");
 
+    if (!this.tree) {
+      this.buildBST([value]);
+      return;
+    }
+
     const node = this.#get(value, this.tree);
     if (!!node) return;
 

@@ -399,6 +399,24 @@ describe("tree", () => {
       expect(tree.tree).toEqual(currentState);
     });
 
+    test("insert successful from empty tree", () => {
+      const emptyTree = new BST();
+      emptyTree.tree = null;
+      emptyTree.insert("some value");
+      expect(emptyTree.tree).toEqual({
+        left: null,
+        right: null,
+        value: "some value",
+      });
+
+      emptyTree.insert("another value");
+      expect(emptyTree.tree).toEqual({
+        left: { left: null, right: null, value: "another value" },
+        right: null,
+        value: "some value",
+      });
+    });
+
     describe("insert succeded, tree is rebalanced", () => {
       test.each([
         [4, [1, 2, 3, 5, 6]],
