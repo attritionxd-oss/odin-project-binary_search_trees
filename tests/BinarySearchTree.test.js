@@ -321,6 +321,27 @@ describe("tree", () => {
         tree.buildBST(data, true);
         expect(tree.isBalanced()).toBe(expectedResult);
       });
+
+      test("manually unbalanced tree returns false", () => {
+        const mockTree = {
+          left: null,
+          right: {
+            left: null,
+            right: {
+              left: null,
+              right: {
+                left: null,
+                right: { left: null, right: null, value: 5 },
+                value: 4,
+              },
+              value: 3,
+            },
+            value: 2,
+          },
+          value: 1,
+        };
+        expect(tree.isBalanced(mockTree)).toBe(false);
+      });
     });
 
     describe("balanced trees", () => {

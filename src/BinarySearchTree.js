@@ -188,9 +188,9 @@ export default class BST {
     else return Math.max(left, right) + 1;
   }
 
-  isBalanced() {
-    if (!this.tree) return;
-    return this.#checkBalance(this.tree) !== -1;
+  isBalanced(tree = this.tree) {
+    if (!tree) return;
+    return this.#checkBalance(tree) !== -1;
   }
 
   rebalance() {}
