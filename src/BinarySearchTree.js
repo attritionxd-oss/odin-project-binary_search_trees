@@ -88,7 +88,31 @@ export default class BST {
     if (!this.isBalanced(newTree)) this.rebalance();
   }
 
-  deleteItem(value) {}
+  #getSuccessor(node) {
+    node = node.right;
+    while (!!node && !!node.left) node = node.left;
+    return node;
+  }
+
+  deleteItem(value, root = this.tree) {
+    if (!value) throw new Error("ArgError: argument must be a valid value");
+    if (!root) return root; // todo
+
+    if (root.value > value) root.left = this.deleteItem(value, root.left);
+    else if (root.value < value)
+      root.right = this.deleteItem(value, root.right);
+    else {
+      // node with 0 or 1 child
+      if (!root.left) return root.right;
+      if (!root.right) return root.left;
+
+      // node with 2 children
+      const successor = this.#getSuccessor(root);
+      root.value = successor.value;
+      root.right = this.deleteItem(successor.value, root.right);
+    }
+    return root;
+  }
 
   levelOrderForEach(callback) {
     if (!callback || typeof callback !== "function")

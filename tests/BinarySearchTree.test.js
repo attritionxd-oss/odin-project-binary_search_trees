@@ -432,4 +432,67 @@ describe("tree", () => {
       });
     });
   });
+
+  describe("delete()", () => {
+    const tree = new BST();
+
+    test("erroneous arg handling", () => {
+      expect(() => tree.deleteItem()).toThrow();
+    });
+
+    test("delete fails for empty tree", () => {
+      tree.deleteItem("some value");
+      expect(tree.tree).toBe(null);
+    });
+
+    test("delete fails: value not found", () => {
+      expect(tree.deleteItem("some value")).toBe(null);
+    });
+
+    describe("delete successful: leaf nodes", () => {
+      test.each([
+        [6, [1, 2, 3, 5, 6]],
+        [2, [1, 2, 3, 5, 6]],
+        ["M", ["F", "D", "J", "B", "E", "G", "K", "A", "C", "I"]],
+        ["B", ["F", "D", "J", "B", "E", "G", "K", "A", "C", "I"]],
+      ])("delete(%s) from %p", (target, data) => {
+        tree.buildBST(data);
+        tree.deleteItem(target);
+        expect(tree.includes(target)).toBe(false);
+      });
+    });
+
+    describe("delete successful: single-child nodes", () => {
+      test.each([
+        [1, 2, [1, 2, 3, 4, 5]],
+        [4, 5, [1, 2, 3, 4, 5]],
+        ["C", "D", ["F", "D", "J", "B", "E", "G", "K", "A", "C", "I"]],
+        ["F", "G", ["F", "D", "J", "B", "E", "G", "K", "A", "C", "I"]],
+      ])("delete(%s), preserve %s from %p", (target, child, data) => {
+        tree.buildBST(data);
+        tree.deleteItem(target);
+        expect(tree.includes(target)).toBe(false);
+        expect(tree.includes(child)).toBe(true);
+        // expect(tree.tree).toBe();
+      });
+    });
+
+    describe("delete successful: two-child nodes", () => {
+      test.each([
+        [2, 1, 3, [1, 2, 3, 4, 5, 6, 7]],
+        [6, 5, 7, [1, 2, 3, 4, 5, 6, 7]],
+        ["B", "A", "C", ["F", "D", "J", "B", "E", "G", "K", "A", "C", "I"]],
+        ["I", "F", "J", ["F", "D", "J", "B", "E", "G", "K", "A", "C", "I"]],
+      ])(
+        "delete(%s), preserve %s and %s from %p",
+        (target, childLeft, childRight, data) => {
+          tree.buildBST(data);
+          tree.deleteItem(target);
+          expect(tree.includes(target)).toBe(false);
+          expect(tree.includes(childLeft)).toBe(true);
+          expect(tree.includes(childRight)).toBe(true);
+        },
+      );
+    });
+  });
 });
