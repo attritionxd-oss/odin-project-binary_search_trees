@@ -65,12 +65,23 @@ export default class BST {
   }
 
   includes(value) {
-    if (!value) throw new Error("ArgError: argument must be a valid string");
+    if (!value) throw new Error("ArgError: argument must be a valid value");
 
     return !!this.#get(value, this.tree);
   }
 
-  insert(value) {}
+  insert(value) {
+    if (!value) throw new Error("ArgError: argument must be a valid value");
+
+    const node = this.#get(value, this.tree);
+    if (!!node) return;
+
+    const newTree = structuredClone(this.tree);
+    this.#insertNode(newTree, value);
+
+    this.tree = newTree;
+    if (!this.isBalanced(newTree)) this.rebalance();
+  }
 
   deleteItem(value) {}
 
@@ -193,5 +204,9 @@ export default class BST {
     return this.#checkBalance(tree) !== -1;
   }
 
-  rebalance() {}
+  rebalance() {
+    const data = [];
+    this.inOrderForEach((element) => data.push(element));
+    this.buildBST(data);
+  }
 }

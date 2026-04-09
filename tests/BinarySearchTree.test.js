@@ -364,4 +364,54 @@ describe("tree", () => {
       });
     });
   });
+
+  describe("rebalance()", () => {
+    const tree = new BST();
+
+    test("rebalance empty tree is undefined", () => {
+      expect(tree.rebalance()).toBeUndefined();
+    });
+
+    test("rebalances manually unbalanced tree", () => {
+      tree.buildBST([1, 2, 3, 4]);
+      expect(tree.isBalanced()).toBe(true);
+
+      // manual insertion unbalances tree
+      tree.tree.right.right.right = new Node(5);
+      expect(tree.isBalanced()).toBe(false);
+
+      tree.rebalance();
+      expect(tree.isBalanced()).toBe(true);
+    });
+  });
+
+  describe("insert()", () => {
+    const tree = new BST();
+
+    test("erroneous arg handling", () => {
+      expect(() => tree.insert()).toThrow();
+    });
+
+    test("insert failed: do nothing", () => {
+      tree.buildBST([1, 2, 3, 4]);
+      const currentState = tree.tree;
+      tree.insert(4);
+      expect(tree.tree).toEqual(currentState);
+    });
+
+    describe("insert succeded, tree is rebalanced", () => {
+      test.each([
+        [4, [1, 2, 3, 5, 6]],
+        [5, [1, 2, 3, 4]],
+        [4, [1, 2, 3, 5]],
+        [4, [1, 2, 9, 3]],
+        [11, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
+        [50, [72, 73, 42, 42, 24, 46, 54, 7, 60, 48]],
+      ])("insert(%s) in %p", (newVal, data) => {
+        tree.buildBST(data);
+        tree.insert(newVal);
+        expect(tree.isBalanced()).toBe(true);
+      });
+    });
+  });
 });
