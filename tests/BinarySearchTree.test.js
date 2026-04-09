@@ -344,6 +344,14 @@ describe("tree", () => {
       });
     });
 
+    test("tree crossover balance functionality", () => {
+      const tree1 = new BST();
+      const tree2 = new BST();
+      tree1.buildBST([1, 2, 3, 4], true);
+      expect(tree2.isBalanced()).toBeUndefined();
+      expect(tree2.isBalanced(tree1.tree)).toBe(false);
+    });
+
     describe("balanced trees", () => {
       test.each([
         [[1, 2, 3, 4], true],
