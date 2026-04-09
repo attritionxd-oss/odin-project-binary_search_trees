@@ -141,11 +141,57 @@ export default class BST {
     this.#recursivePostOrder(this.tree, callback);
   }
 
-  height(value) {}
+  #calculateHeight(node) {
+    if (!node) return -1; // or 0, depending on your definition
 
-  depth(value) {}
+    const leftHeight = this.#calculateHeight(node.left);
+    const rightHeight = this.#calculateHeight(node.right);
 
-  isBalanced() {}
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+
+  height(value) {
+    if (!value) return;
+    const node = this.#get(value, this.tree);
+    if (!node) return;
+
+    return this.#calculateHeight(node);
+  }
+
+  #calculateDepth(value, root = this.tree, currentDepth = 0) {
+    if (!root) return;
+
+    if (root.value === value) {
+      return currentDepth;
+    }
+
+    if (value > root.value) {
+      return this.#calculateDepth(value, root.right, currentDepth + 1);
+    } else {
+      return this.#calculateDepth(value, root.left, currentDepth + 1);
+    }
+  }
+
+  depth(value) {
+    if (!value) return;
+    return this.#calculateDepth(value);
+  }
+
+  #checkBalance(node) {
+    if (!node) return 0;
+
+    const left = this.#checkBalance(node.left);
+    const right = this.#checkBalance(node.right);
+    const delta = Math.abs(left - right);
+
+    if (left === -1 || right === -1 || delta > 1) return -1;
+    else return Math.max(left, right) + 1;
+  }
+
+  isBalanced() {
+    if (!this.tree) return;
+    return this.#checkBalance(this.tree) !== -1;
+  }
 
   rebalance() {}
 }
