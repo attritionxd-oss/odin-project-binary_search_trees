@@ -10,26 +10,29 @@ describe("project-required tests", () => {
     return data;
   };
 
-  const printAll = () => {
-    test("print levelOrder", () => {
-      const values = [];
-      tree.levelOrderForEach((i) => values.push(i));
-      console.log("levelOrder:", values.join(", "));
-    });
-    test("print preOrder", () => {
-      const values = [];
-      tree.preOrderForEach((i) => values.push(i));
-      console.log("preOrder:", values.join(", "));
-    });
-    test("print postOrder", () => {
-      const values = [];
-      tree.postOrderForEach((i) => values.push(i));
-      console.log("postOrder:", values.join(", "));
-    });
-    test("print inOrder", () => {
-      const values = [];
-      tree.inOrderForEach((i) => values.push(i));
-      console.log("inOrder:", values.join(", "));
+  const printAll = (useMockLog = true) => {
+    const values = [];
+    const mockPush = jest.fn((i) => values.push(i));
+
+    const mockLog = jest.fn();
+    const customLog = (logName) => {
+      if (useMockLog) {
+        mockLog();
+        expect(mockLog).toHaveBeenCalled();
+      } else {
+        console.log(logName, ":", values.join(", "));
+      }
+    };
+
+    test.each([
+      ["levelOrder", "levelOrderForEach"],
+      ["preOrder", "preOrderForEach"],
+      ["postOrder", "postOrderForEach"],
+      ["inOrder", "inOrderForEach"],
+    ])("print tree.%s()", (testName, methodName) => {
+      values.splice(0, values);
+      tree[methodName](mockPush);
+      customLog(testName);
     });
   };
 
