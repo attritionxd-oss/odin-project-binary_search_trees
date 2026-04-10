@@ -74,7 +74,7 @@ export default class BST {
     if (!value) throw new Error("ArgError: argument must be a valid value");
 
     if (!this.tree) {
-      this.buildBST([value]);
+      this.tree = new Node(value);
       return;
     }
 
